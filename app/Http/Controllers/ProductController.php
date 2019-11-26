@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Producttype;
 use App\Products;
 use Illuminate\Http\Request;
+use App\NotificationType;
 use Validator;
 use Auth;
+use File;
 
 class ProductController extends Controller
 {
@@ -16,7 +18,6 @@ class ProductController extends Controller
             if (Auth::user()->role == 1 || Auth::user()->role == 0) {
                 $lsProductType = Producttype::getAllProductType();
                 return view('ProductTypeManagement', ['lsProductType' => $lsProductType]);
-            
             }
         } else {
             return redirect('/Login');
@@ -24,16 +25,22 @@ class ProductController extends Controller
     }
     public function addProductType(Request $request)
     {
-        if (Auth::check() && Auth::user()->email_verified_at == 1) {
-            if (Auth::user()->role == 1) {
-                Producttype::addProductType($request);
-                return redirect()->back()->with('success', 'Thêm sản phẩm thành công');
+        $validator = Validator::make($request->all(), [
+            'nameproduct' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('errors', $validator->errors());
+        } else {
+            if (Auth::check() && Auth::user()->email_verified_at == 1) {
+                if (Auth::user()->role == 1) {
+                    Producttype::addProductType($request);
+                    return redirect()->back()->with('success', 'Thêm sản phẩm thành công');
+                } else {
+                    return redirect()->back();
+                }
             } else {
-                return redirect()->back();
+                return redirect('/Login');
             }
-        }
-        else{
-            return redirect('/Login');
         }
     }
 
@@ -46,8 +53,7 @@ class ProductController extends Controller
             } else {
                 return redirect()->back();
             }
-        }
-        else{
+        } else {
             return redirect('/Login');
         }
     }
@@ -61,8 +67,7 @@ class ProductController extends Controller
             } else {
                 return redirect()->back();
             }
-        }
-        else{
+        } else {
             return redirect('/Login');
         }
     }
@@ -76,8 +81,7 @@ class ProductController extends Controller
             } else {
                 return redirect()->back();
             }
-        }
-        else{
+        } else {
             return redirecut('/Login');
         }
     }
@@ -117,8 +121,7 @@ class ProductController extends Controller
             } else {
                 return redirect()->back();
             }
-        }
-        else {
+        } else {
             return redirect("/Login");
         }
     }
@@ -128,33 +131,31 @@ class ProductController extends Controller
         if (Auth::check() && Auth::user()->email_verified_at == 1) {
             if (Auth::user()->role == 1) {
                 products::deleteProduct($id);
-                return redirect('/ProductManagement')->with('success', 'Xóa sản phẩm thành công');
+                return redirect('/NotificationManagement')->with('success', 'Xóa sản phẩm thành công');
             } else {
                 return redirect()->back();
             }
-        }
-        else{
+        } else {
             return redirect('/Login');
         }
     }
 
-    public function editProduct($id){
+    public function editProduct($id)
+    {
         if (Auth::check() && Auth::user()->email_verified_at == 1) {
             $product = products::getProductId($id);
-            if(($product[0]->user_id == Auth::user()->id) || Auth::user()->role == 1){
+            if (($product[0]->user_id == Auth::user()->id) || Auth::user()->role == 1) {
                 return view('EditProduct', ['name' => Auth::user()->name, 'img' => Auth::user()->img, 'product'=> $product]);
+            } else {
+                return redirect('/ProductManagement')->with('error', 'Bạn không có sản phẩm này');
             }
-            else{
-                    return redirect('/ProductManagement')->with('error', 'Bạn không có sản phẩm này');
-            }
-        }
-        else{
+        } else {
             return redirect('/Login');
         }
-       
     }
 
-    public function editProductPost(Request $request, $id){
+    public function editProductPost(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'Name' => 'required|min:6',
             'Price' => 'required|numeric',
@@ -169,29 +170,26 @@ class ProductController extends Controller
         }
         $fileName = null;
         $fileRandom = null;
-        if($request->hasFile('myfile')){
+        if ($request->hasFile('myfile')) {
             $file = $request->file('myfile');
             $duoi = $file->getClientOriginalExtension();
-            if($duoi != "jpg" && $duoi != "png" && $duoi != "jpeg" && $duoi != "JPG" && $duoi != "PNG" && $duoi != "JPEG" ){
+            if ($duoi != "jpg" && $duoi != "png" && $duoi != "jpeg" && $duoi != "JPG" && $duoi != "PNG" && $duoi != "JPEG") {
                 return redirect()->back()->with('error', 'Chỉ được thêm file .jpg/.png/.jpeg')->withInput(
                     $request->except('')
                 );
-            }
-            else{
+            } else {
                 // xóa file product cũ
                 $product = products::getProductId($id);
                 $uploadDir = public_path('Images');
-                if(File::exists($uploadDir. '/' . $product[0]->Img)){
+                if (File::exists($uploadDir. '/' . $product[0]->Img)) {
                     File::delete($uploadDir. '/' . $product[0]->Img);
-                }
-                else{
+                } else {
                     return redirect()->back()->with('error', 'file hình không tìm thấy để xóa');
                 }
                 // thêm file product mới
                 $fileName = $file->getClientOriginalName();
                 $fileRandom = str_random(8). '_' .$fileName;
-                $file->move('public/Images',$fileRandom);
-               
+                $file->move('public/Images', $fileRandom);
             }
         }
         products::editProduct($request, $id, $fileRandom);
@@ -204,27 +202,27 @@ class ProductController extends Controller
         if (Auth::check() && Auth::user()->email_verified_at == 1) {
             $lsProductType = Producttype::getAllProductType();
             $lsProduct = Products::productByProductType($id);
-            return view('HomeUser', ['name' => Auth::user()->name, 'img' => Auth::user()->img, 'lsProductType' => $lsProductType, 'lsProduct' => $lsProduct]);
-            // return redirect()->route('home', ['name' => Auth::user()->name, 'img' => Auth::user()->img, 'lsProductType' => $lsProductType, 'lsProduct' => $lsProduct]);
-        }
-        else{
+            $lsNotificationType = NotificationType::getAllNotificationType();
+            return view('HomeUser', ['name' => Auth::user()->name, 'img' => Auth::user()->img, 'lsProductType' => $lsProductType, 'lsProduct' => $lsProduct, 'lsNotificationType'=>$lsNotificationType]);
+        // return redirect()->route('home', ['name' => Auth::user()->name, 'img' => Auth::user()->img, 'lsProductType' => $lsProductType, 'lsProduct' => $lsProduct]);
+        } else {
             $lsProductType = Producttype::getAllProductType();
             $lsProduct = Products::productByProductType($id);
-            return view('HomeGues', [ 'lsProductType' => $lsProductType, 'lsProduct' => $lsProduct]);
+            $lsNotificationType = NotificationType::getAllNotificationType();
+            return view('HomeGues', [ 'lsProductType' => $lsProductType, 'lsProduct' => $lsProduct, 'lsNotificationType'=>$lsNotificationType]);
         }
     }
     
     public static function buyProduct(Request $request, $id)
     {
-      
-            $product = Products::where('id', $id)->get()->first();
-            if (!$product) {
-                return redirect()->back()->with('success', 'Sản phẩm không tồn tại!');
-            }
-            $cart = array();
-            $cart = $request->session()->get('cart');
-            if (!$cart) {
-                $cart = [
+        $product = Products::where('id', $id)->get()->first();
+        if (!$product) {
+            return redirect()->back()->with('success', 'Sản phẩm không tồn tại!');
+        }
+        $cart = array();
+        $cart = $request->session()->get('cart');
+        if (!$cart) {
+            $cart = [
                 $id=>["quantity"=> 1,
                     "Id" => $id,
                     "Name" => $product->Name,
@@ -233,17 +231,17 @@ class ProductController extends Controller
                     
                 ]
                 ];
-                $request->session()->put('cart', $cart);
-                return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công!');
-            }
+            $request->session()->put('cart', $cart);
+            return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công!');
+        }
 
-            if (isset($cart[$id])) {
-                $cart[$id]["quantity"]++;
-                session()->put('cart', $cart);
-                return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công!');
-            }
+        if (isset($cart[$id])) {
+            $cart[$id]["quantity"]++;
+            session()->put('cart', $cart);
+            return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công!');
+        }
 
-            $cart[$id] = [
+        $cart[$id] = [
             "quantity"=> 1,
             "Id" => $id,
             "Name" => $product->Name,
@@ -252,58 +250,71 @@ class ProductController extends Controller
    
         ];
        
-            $request->session()->put('cart', $cart);
-            return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công!');
+        $request->session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công!');
+    }
+
+
+    public function cartPayment(Request $request)
+    {
+        $lsProductType = Producttype::getAllProductType();
+        $lsProductPayment = $request->session()->get('cart');
+        $totalPay = 0;
+        $lsNotificationType = NotificationType::getAllNotificationType();
+        if ($lsProductPayment) {
+            foreach ($lsProductPayment as $key => $item) {
+                $totalPay = $totalPay + $item['Price'] * $item['quantity'];
+            }
+            return view('CartPaymentGues', [ 'lsProductType' => $lsProductType, 'lsProductPayment' => $lsProductPayment, 'totalPay'=> $totalPay, 'lsNotificationType' => $lsNotificationType]);
         }
+        return redirect("/")->with('error', 'Chưa có sản phẩm nào trong giỏ hàng');
+    }
+
+    public function addProductSession(Request $request, $id)
+    {
+        $cart = $request->session()->get('cart');
+        if ($cart[$id]) {
+            $cart[$id]['quantity'] ++;
+            session()->put('cart', $cart);
+            return redirect()->back();
+        }
+    }
+ 
+
+    public function minusProductSession(Request $request, $id)
+    {
+        $cart = $request->session()->get('cart');
+        if ($cart[$id]) {
+            $cart[$id]['quantity'] --;
+            session()->put('cart', $cart);
+            return redirect()->back();
+        }
+    }
+
+    public function removeProductSession(Request $request, $id)
+    {
+        $cart = $request->session()->get('cart');
+        if ($cart[$id]) {
+            unset($cart[$id]);
+            session()->put('cart', $cart);
+            return redirect()->back();
+        }
+    }
 
 
-    public function cartPayment(Request $request){
-        
+    public function searchProduct(Request $request)
+    {
+        if (Auth::check() && Auth::user()->email_verified_at == 1) {
+            $lsProduct = products::getAllProductBySearch($request->key);
             $lsProductType = Producttype::getAllProductType();
-            $lsProductPayment = $request->session()->get('cart');
-            $totalPay = 0;
-            if ($lsProductPayment) {
-                foreach ($lsProductPayment as $key => $item) {
-                    $totalPay = $totalPay + $item['Price'] * $item['quantity'];
-                }
-                return view('CartPaymentGues', [ 'lsProductType' => $lsProductType, 'lsProductPayment' => $lsProductPayment, 'totalPay'=> $totalPay]);
-            }
-            return redirect("/")->with('error', 'Chưa có sản phẩm nào trong giỏ hàng');
+            $lsNotificationType = NotificationType::getAllNotificationType();
+            return view('HomeUser', ['name' => Auth::user()->name, 'img' => Auth::user()->img, 'lsProductType' => $lsProductType, 'lsProduct' => $lsProduct, 'lsNotificationType'=>$lsNotificationType]);
         }
-
-    public function addProductSession(Request $request, $id){
-     
-            $cart = $request->session()->get('cart');
-            if ($cart[$id]) {
-                $cart[$id]['quantity'] ++;
-                session()->put('cart', $cart);
-                return redirect()->back();
-            }
+        else{
+            $lsProduct = products::getAllProductBySearch($request->key);
+            $lsProductType = Producttype::getAllProductType();
+            $lsNotificationType = NotificationType::getAllNotificationType();
+            return view('HomeGues', ['lsProductType' => $lsProductType, 'lsProduct' => $lsProduct, 'lsNotificationType'=>$lsNotificationType]);
         }
- 
-
-    public function minusProductSession(Request $request, $id){
-       
-            $cart = $request->session()->get('cart');
-            if ($cart[$id]) {
-                $cart[$id]['quantity'] --;
-                session()->put('cart', $cart);
-                return redirect()->back();
-            }
-       
     }
-
-    public function removeProductSession(Request $request, $id){
-        
-            $cart = $request->session()->get('cart');
-            if ($cart[$id]) {
-                unset($cart[$id]);
-                session()->put('cart', $cart);
-                return redirect()->back();
-            }
-       
-        
-    }
-
- 
 }

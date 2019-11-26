@@ -76,9 +76,7 @@
                             </ul>
                         </li>
                         <!-- Control Sidebar Toggle Button -->
-                        <li>
-                            <a href="#" data-toggle="control-sidebar"><i class="fas fa-sign-out-alt"></i></a>
-                        </li>
+                        
                     </ul>
                 </div>
             </nav>
@@ -121,6 +119,9 @@
                             <li><a href={{asset('/ProductManagement')}}><i class="fa fa-circle-o"></i> Sản phẩm </a></li>
                             <li><a href={{asset('/UserManagement')}}><i class="fa fa-circle-o"></i> Người dùng </a></li>
                             <li><a href="{{asset('/CartPaymentManagement')}}"><i class="fa fa-circle-o"></i> Đơn hàng </a></li>
+                            <li><a href="{{asset('/NotificationTypeManagement')}}"><i class="fa fa-circle-o"></i> Loại thông báo </a></li>
+                            <li><a href="{{asset('/NotificationManagement')}}"><i class="fa fa-circle-o"></i> Thông báo </a></li>
+                            
                         </ul>
                     </li>
 
@@ -131,13 +132,23 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                    Product Style
+                    Product Type
                     <small>Preview page</small>
                 </h1>
             </section>
 
             <br />
             <hr />
+            <?php if(Session::has('errors')){
+                $errors =  Session::get('errors');
+                foreach ($errors->all() as $key => $error) {
+            ?>
+              <div class="alert alert-danger">
+                  <?php echo $error ?>
+                  <br />
+              </div>
+              <?php }} ?>
+
             <?php if(Session::has('success')){
                 $success = Session::get('success');?>
                    <div class="alert alert-success">

@@ -134,6 +134,23 @@
                         </ul>
                     </li>
 
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-dashboard"></i> <span>Thông báo</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                    
+                        <ul class="treeview-menu">
+                                <li><a href="{{asset('/Notification')}}"><i class="fa fa-circle-o"></i> Tất cả thông báo</a></li>
+                            <?php foreach ($lsNotificationType as $key => $value) { ?>
+                                 <li><a href="{{asset('/NotificationByNotificationType')}}/<?php echo $value->id?>"><i class="fa fa-circle-o"></i> <?php echo $value->name ?></a></li>
+                           <?php }?>
+                         
+                        </ul>
+                    </li>
+
                     <!-- /.sidebar -->
         </aside>
 

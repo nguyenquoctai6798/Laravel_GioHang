@@ -130,6 +130,8 @@
                             <li><a href={{asset('/ProductManagement')}}><i class="fa fa-circle-o"></i> Sản phẩm </a></li>
                             <li><a href={{asset('/UserManagement')}}><i class="fa fa-circle-o"></i> Người dùng </a></li>
                             <li><a href="{{asset('/CartPaymentManagement')}}"><i class="fa fa-circle-o"></i> Đơn hàng </a></li>
+                            <li><a href="{{asset('/NotificationTypeManagement')}}"><i class="fa fa-circle-o"></i> Loại thông báo </a></li>
+                            <li><a href="{{asset('/NotificationManagement')}}"><i class="fa fa-circle-o"></i> Thông báo </a></li>
                         </ul>
                     </li>
                   
@@ -170,11 +172,12 @@
                     <br/><br/>
                     Mô tả:<div class="form-group">
                    
-                            <textarea  type="text" class="form-control" name="Description" id="" aria-describedby="helpId"
+                            <textarea style="height:400px"  type="text" class="form-control" name="Description" id="" aria-describedby="helpId"
                             placehoder = 'Nhập mô tả'> <?php echo $product[0]->Description ?> </textarea>
                     </div>
         
                     <button type='submit' class='btn btn-success'>Submit</button>
+                    <a href="{{asset('/ProductManagement')}}" class="btn btn-warning">Back</a>
                 </form>
                 
            

@@ -19,7 +19,7 @@ class Products extends Migration
             $table->string('Name');
             $table->string('Img');
             $table->double('Price');
-            $table->string('Description');
+            $table->string('Description', 3000);
             $table->timestamps();
 
         });

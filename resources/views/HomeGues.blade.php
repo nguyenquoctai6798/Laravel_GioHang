@@ -46,7 +46,12 @@
 
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
-
+            <div class="row">
+                    <div class="col-sm-11"></div>
+                    <div class="col-sm-1">
+                            <a style = 'font-size:20px' href="{{asset('/Login')}}">Đăng nhập</a>
+                    </div>
+                </div>   
         <header class="main-header">
             <!-- Logo -->
             <a href="../index2.html" class="logo">
@@ -110,21 +115,40 @@
                         </a>
                     
                         <ul class="treeview-menu">
-                                <li><a href="{{asset('/')}}"><i class="fa fa-circle-o"></i> All product</a></li>
+                                <li><a href="{{asset('/')}}"><i class="fa fa-circle-o"></i> Tất cả sản phẩm</a></li>
                             <?php foreach ($lsProductType as $key => $value) { ?>
                                  <li><a href="{{asset('/ProductByProductType')}}/<?php echo $value->id?>"><i class="fa fa-circle-o"></i> <?php echo $value->name ?></a></li>
                            <?php }?>
                          
                         </ul>
+                       
                     </li>
+                    <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-dashboard"></i> <span>Thông báo</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                        
+                            <ul class="treeview-menu">
+                                    <li><a href="{{asset('/Notification')}}"><i class="fa fa-circle-o"></i> Tất cả thông báo</a></li>
+                                <?php foreach ($lsNotificationType as $key => $value) { ?>
+                                     <li><a href="{{asset('/NotificationByNotificationType')}}/<?php echo $value->id?>"><i class="fa fa-circle-o"></i> <?php echo $value->name ?></a></li>
+                               <?php }?>
+                             
+                            </ul>
+                        </li>
 
                     <!-- /.sidebar -->
         </aside>
-
+      
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
+               
+                
                 <h1>
                     Home User
                     <small>Preview page</small>
@@ -149,6 +173,19 @@
                    <br />
                </div>
                <?php }?>
+
+               <div class = "Search">
+                    <form action="{{url('SearchProduct')}}" method="GET">
+                        @csrf
+                            <div class="row">
+                                <div class="col-sm-10"> <input type="text" class="form-control" name="key" id="" aria-describedby="helpId" placeholder=""></div>
+                                <div class="col-sm-2">   <button class="btn btn-info">Search</button></div>
+                            </div>
+                        </form>
+                    </div>
+                    <br/>
+
+
             <div class="row">
                   <?php foreach ($lsProduct as $key => $value) { ?>
                     <div class="card">

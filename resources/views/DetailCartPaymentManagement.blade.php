@@ -33,7 +33,9 @@
             width: 100%;
             height: 100%;
         }
-
+        .cart{
+            margin-top:10px;
+        }
     </style>
 </head>
 
@@ -83,9 +85,7 @@
                             </ul>
                         </li>
                         <!-- Control Sidebar Toggle Button -->
-                        <li>
-                            <a href="#" data-toggle="control-sidebar"><i class="fas fa-sign-out-alt"></i></a>
-                        </li>
+                       
                     </ul>
                 </div>
             </nav>
@@ -129,6 +129,8 @@
                             <li><a href="{{asset('/UserManagement')}}"><i class="fa fa-circle-o"></i> Người dùng </a>
                             </li>
                             <li><a href="{{asset('/CartPaymentManagement')}}"><i class="fa fa-circle-o"></i> Đơn hàng </a></li>
+                            <li><a href="{{asset('/NotificationTypeManagement')}}"><i class="fa fa-circle-o"></i> Loại thông báo </a></li>
+                            <li><a href="{{asset('/NotificationManagement')}}"><i class="fa fa-circle-o"></i> Thông báo </a></li>
                         </ul>
                     </li>
 
@@ -150,8 +152,8 @@
             <h2 style="color:grey">Thông tin khách hàng </h2>
             <table style="width:100%; font-size:20px">
                 <tr>
-                    <th>Image</th>
-                    <th>Name</th>
+                    <th> Ảnh </th>
+                    <th> Tên </th>
                     <th>Email</th>
                 </tr>
                 <tr>
@@ -163,28 +165,31 @@
             </table>
             <h2 style="color:grey">Thống kê đơn hàng</h2>
             <!-- /.row -->
-            <div class="row">
+            <table style="width:100%; font-size:20px">
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Tên</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                    </tr>
                     <?php foreach ($lsProduct as $key => $item) { ?>
-                        <div class="card">
-                                <div class="col-md-3">
-                                    <img class="card-img-top" src="{{asset('public/Images')}}/<?php echo $item->Img?>"
-                                        alt="Card image cap">
-                                    <div class="card-body">
-                                        <div class="card-title"><b style="font-size:22px"><?php echo $item->Name?></b></div>
-                                        <p class="card-text"><i style="font-size:18px">Giá: <?php echo $item->Price?></i></p>
-                                        <p class="card-text"><i style="font-size:18px">Số lượng: <?php echo $item->quantity?></i></p>
-                                    </div>
-                                </div>
-                            </div>
+                    <tr>
+                        <td><img class="cart" style="height:100px" alt="" src="{{asset('public/Images')}}/<?php echo $item->Img?>" ></td>
+                        <td><?php echo $item->Name?></td>
+                        <td><?php echo $item->Price?></td>
+                        <td> <?php echo $item->quantity?></td>
+                    </tr>
                     <?php } ?>
-                
+                </table>
+          
+                <div class="pay">
+                        <b style="font-size:40px">Tổng tiền: <?php echo $totalPay ?></b> <br/>
+                        <a href="{{asset('/CartPaymentManagement')}}" class="btn btn-warning">Quay lại</a>
+                    </div>
 
             </div>
 
-            <div class="pay">
-                    <b style="font-size:40px"> <?php echo $totalPay ?></b> <br/>
-                    <a href="{{asset('/CartPaymentManagement')}}" class="btn btn-warning">Quay lại</a>
-                </div>
+           
 
 
 

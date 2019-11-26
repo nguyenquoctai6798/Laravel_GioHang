@@ -44,4 +44,10 @@ class Products extends Model
         $lsProduct = products::all()->where('id_producttype', $id);
         return $lsProduct;
     }
+
+    public static function getAllProductBySearch($key){
+
+        $lsProduct = products::where('Name', 'LIKE', '%'. $key . '%' )->get()    ;
+        return $lsProduct;  
+    }
 }

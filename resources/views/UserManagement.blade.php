@@ -83,9 +83,7 @@
                             </ul>
                         </li>
                         <!-- Control Sidebar Toggle Button -->
-                        <li>
-                            <a href="#" data-toggle="control-sidebar"><i class="fas fa-sign-out-alt"></i></a>
-                        </li>
+                      
                     </ul>
                 </div>
             </nav>
@@ -126,6 +124,8 @@
                             <li><a href={{asset('/ProductManagement')}}><i class="fa fa-circle-o"></i> Sản phẩm </a></li>
                             <li><a href={{asset('/UserManagement')}}><i class="fa fa-circle-o"></i> Người dùng </a></li>
                             <li><a href="{{asset('/CartPaymentManagement')}}"><i class="fa fa-circle-o"></i> Đơn hàng </a></li>
+                            <li><a href="{{asset('/NotificationTypeManagement')}}"><i class="fa fa-circle-o"></i> Loại thông báo </a></li>
+                            <li><a href="{{asset('/NotificationManagement')}}"><i class="fa fa-circle-o"></i> Thông báo </a></li>
                         </ul>
                     </li>
 

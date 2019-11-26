@@ -70,3 +70,33 @@ Route::get('/CartPaymentManagement', 'PaymentController@showAllCartPayment');
 Route::get('/DetailCartPaymentManagement/{id}', 'PaymentController@detailCartPaymentManagement');
 
 Route::get('/CountAllAtHouse', 'PaymentController@CountHome');
+
+Route::get('/NotificationTypeManagement', 'NotificationTypeController@notificationTypeManagement');
+
+Route::post('/AddNotificationType', 'NotificationTypeController@addNotificationType');
+
+Route::get('/DeleteNotificationType/{id}', 'NotificationTypeController@deleteNotificationType');
+
+Route::get('/NotificationManagement', 'NotificationController@notificationManagement');
+
+Route::get('/CreateNotification', 'NotificationController@createNotification');
+
+Route::post('/CreateNotification', 'NotificationController@createNotificationPost');
+
+Route::get('/DeleteNotification/{id}', 'NotificationController@deleteNotification');
+
+Route::get('/EditNotification/{id}', 'NotificationController@editNotification');
+
+Route::post('/EditNotification/{id}', 'NotificationController@editNotificationPost');
+
+Route::get('/DetailNotification/{id}', 'NotificationController@DetailNotification');
+
+Route::get('/Notification', 'NotificationController@getAllNotificationUser');
+
+Route::get('/ShowNotification/{id}', 'NotificationController@showNotification');
+
+Route::get('/NotificationByNotificationType/{id}', 'NotificationController@notificationByNotificationType');
+
+Route::get('/SearchProduct', 'ProductController@searchProduct');
+
+Route::get('/SearchNotification', 'NotificationController@searchNotification');

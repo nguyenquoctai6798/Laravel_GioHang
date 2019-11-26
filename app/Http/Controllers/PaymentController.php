@@ -6,6 +6,7 @@ use App\Payment;
 use App\Producttype;
 use App\Products;
 use App\User;
+use App\NotificationType;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller

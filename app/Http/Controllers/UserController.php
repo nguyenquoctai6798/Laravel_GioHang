@@ -7,6 +7,7 @@ use App\User;
 use App\Products;
 use App\Producttype;
 use App\Payment;
+use App\NotificationType;
 use Illuminate\Support\Facades\Hash;
 use Mail;
 use Auth;
@@ -39,12 +40,15 @@ class UserController extends Controller
             } else if (Auth::user()->role == 0) {
                 $lsProductType = Producttype::getAllProductType();
                 $lsProduct = Products::getAllProduct();
-                return view('HomeUser', ['name' => Auth::user()->name, 'img' => Auth::user()->img, 'lsProductType' => $lsProductType, 'lsProduct' => $lsProduct]);
+                $lsNotificationType = NotificationType::getAllNotificationType();
+
+                return view('HomeUser', ['name' => Auth::user()->name, 'img' => Auth::user()->img, 'lsProductType' => $lsProductType, 'lsProduct' => $lsProduct, 'lsNotificationType' => $lsNotificationType]);
             }
         } else {
             $lsProductType = Producttype::getAllProductType();
             $lsProduct = Products::getAllProduct();
-            return view('HomeGues', ['lsProductType' => $lsProductType, 'lsProduct' => $lsProduct]);
+            $lsNotificationType = NotificationType::getAllNotificationType();
+            return view('HomeGues', ['lsProductType' => $lsProductType, 'lsProduct' => $lsProduct, 'lsNotificationType' => $lsNotificationType]);
         }
     }
 

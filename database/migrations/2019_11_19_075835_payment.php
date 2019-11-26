@@ -16,7 +16,7 @@ class Payment extends Migration
         Schema::create('payment', function(Blueprint $table){
             $table->bigIncrements('id');
             $table->string('gmail');
-            $table->string('lsProduct');
+            $table->string('lsProduct', 1000);
             $table->integer('totalPay');
             $table->timestamps();
         });
